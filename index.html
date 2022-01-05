@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>QR test</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+
+      canvas {
+        display: block;
+        margin: 0 auto 1em auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Signal Desktop QR code test</h1>
+
+    <canvas id="qrCodeCanvas"></canvas>
+
+    <canvas id="simpleCanvas" width="60" height="60"></canvas>
+
+    <script src="qrcode.js"></script>
+    <script>
+      // Draw simple test canvas
+      {
+        const context = simpleCanvas.getContext("2d");
+
+        context.fillStyle = "#ff0000";
+        context.fillRect(0, 0, 60, 60);
+
+        context.fillStyle = "#ffffff";
+        context.fillRect(30, 30, 20, 10);
+      }
+
+      // Draw QR code canvas
+      {
+        const SIZE = 256;
+
+        const qr = qrcode(0, "H");
+        qr.addData(
+          "https://example.com/signal-test-link?fakecode1=one-two-three-four-five&fakecode2=six-seven-eight-nine"
+        );
+        qr.make();
+
+        const canvasSize = SIZE * window.devicePixelRatio;
+        qrCodeCanvas.width = qrCodeCanvas.height = canvasSize;
+        qrCodeCanvas.style.width = qrCodeCanvas.style.height = `${SIZE}px`;
+
+        const context = qrCodeCanvas.getContext("2d");
+
+        const cellSize = canvasSize / qr.getModuleCount();
+        context.clearRect(0, 0, canvasSize, canvasSize);
+        qr.renderTo2dContext(context, cellSize);
+      }
+    </script>
+  </body>
+</html>
