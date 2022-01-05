@@ -15,18 +15,59 @@
         font-family: "Segoe UI", system-ui, sans-serif;
       }
 
-      canvas {
-        display: block;
-        margin: 0 auto 1em auto;
+      table {
+        margin: 0 auto;
+        border-collapse: collapse;
+      }
+
+      tr {
+        border-bottom: 1px solid #000;
+      }
+
+      tbody tr:last-child {
+        border: none;
+      }
+
+      td,
+      th {
+        padding: 1em;
+      }
+
+      td:first-child,
+      th:first-child {
+        border-right: 1px solid #000;
       }
     </style>
   </head>
   <body>
     <h1>Signal Desktop QR code test</h1>
 
-    <canvas id="qrCodeCanvas"></canvas>
+    <noscript>JavaScript must be enabled to use this test.</noscript>
 
-    <canvas id="simpleCanvas" width="60" height="60"></canvas>
+    <table>
+      <thead>
+        <tr>
+          <th>Expected</th>
+          <th>Actual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img
+              src="expectedqr.png"
+              alt="Expected QR code"
+              style="width: 256px; height: 256px"
+            />
+          </td>
+          <td><canvas id="qrCodeCanvas"></canvas></td>
+        </tr>
+        <tr>
+          <td><img src="expectedsimple.png" alt="Expected red test" /></td>
+          <td><canvas id="simpleCanvas" width="60" height="60"></canvas></td>
+        </tr>
+      </tbody>
+    </table>
 
     <script src="qrcode.js"></script>
     <script>
@@ -58,7 +99,8 @@
         const context = qrCodeCanvas.getContext("2d");
 
         const cellSize = canvasSize / qr.getModuleCount();
-        context.clearRect(0, 0, canvasSize, canvasSize);
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, canvasSize, canvasSize);
         qr.renderTo2dContext(context, cellSize);
       }
     </script>
